@@ -1,10 +1,10 @@
 package hello.restAPI.domain.post;
 
 import hello.restAPI.domain.user.User;
-import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity

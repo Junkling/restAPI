@@ -1,12 +1,12 @@
 package hello.restAPI.domain.user;
 
 import hello.restAPI.domain.heart.Heart;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -22,6 +22,7 @@ public class User {
 
     private String nickName;
 
+    @ColumnDefault("null")
     private String role;
 
     @OneToOne(mappedBy = "user")

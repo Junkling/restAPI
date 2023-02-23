@@ -3,12 +3,12 @@ package hello.restAPI.domain.comment;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import hello.restAPI.domain.post.Post;
 import hello.restAPI.domain.user.User;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
 @Data
 @Entity

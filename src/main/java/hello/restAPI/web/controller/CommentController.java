@@ -7,7 +7,6 @@ import hello.restAPI.web.service.comment.CommentService;
 import hello.restAPI.web.service.post.PostService;
 import hello.restAPI.web.service.user.UserService;
 import hello.restAPI.web.utils.HeaderCheck;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 
 @Controller

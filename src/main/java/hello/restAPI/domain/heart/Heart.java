@@ -2,8 +2,9 @@ package hello.restAPI.domain.heart;
 
 import hello.restAPI.domain.post.Post;
 import hello.restAPI.domain.user.User;
-import jakarta.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
 
 
 @Entity

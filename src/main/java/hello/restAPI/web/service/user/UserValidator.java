@@ -31,8 +31,8 @@ public class UserValidator implements Validator {
         if (userRepository.findByAccountId(user.getAccountId()).orElse(null)!=null) {
             errors.rejectValue("loginId","idUnique","ID 중복입니다.");
         }
-        if (userRepository.findByNickName(user.getNickName()).orElse(null)!=null) {
-            errors.rejectValue("nickName","nickNameUnique","닉네임 중복입니다.");
-        }
+//        if (userRepository.findByNickName(user.getNickName()).orElse(null)!=null) {
+//            errors.rejectValue("nickName","nickNameUnique","닉네임 중복입니다.");
+//        }
     }
 }

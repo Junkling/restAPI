@@ -4,10 +4,10 @@ import hello.restAPI.domain.comment.Comment;
 import hello.restAPI.domain.post.Post;
 import hello.restAPI.domain.user.User;
 import hello.restAPI.web.repository.comment.CommentRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 

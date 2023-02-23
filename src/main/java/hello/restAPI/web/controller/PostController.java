@@ -9,8 +9,6 @@ import hello.restAPI.web.service.heart.HeartService;
 import hello.restAPI.web.service.post.PostService;
 import hello.restAPI.web.service.user.UserService;
 import hello.restAPI.web.utils.HeaderCheck;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 

@@ -7,10 +7,10 @@ import hello.restAPI.domain.user.User;
 import hello.restAPI.web.repository.heart.HeartRepository;
 import hello.restAPI.web.repository.post.PostRepository;
 import hello.restAPI.web.repository.user.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 
 
