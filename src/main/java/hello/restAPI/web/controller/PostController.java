@@ -3,6 +3,7 @@ package hello.restAPI.web.controller;
 import hello.restAPI.customException.PostUserException;
 import hello.restAPI.domain.comment.Comment;
 import hello.restAPI.domain.post.Post;
+import hello.restAPI.web.dto.PostDto;
 import hello.restAPI.web.dto.PostUpdateDto;
 import hello.restAPI.domain.user.User;
 import hello.restAPI.web.service.heart.HeartService;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -25,7 +27,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/post")
+@RequestMapping("/api/posts")
 public class PostController {
     private final PostService postService;
 
@@ -34,18 +36,18 @@ public class PostController {
 
     private final HeaderCheck headerCheck;
 
-    @GetMapping("/test")
-    public ResponseEntity<Object> list(@RequestBody Object post ,@RequestHeader HttpHeaders headers) {
+//    @GetMapping("/test")
+//    public ResponseEntity<Object> list(@RequestBody Object post ,@RequestHeader HttpHeaders headers) {
+//
+//        System.out.println("Post=" + post);
+//        String s = getAuth(headers);
+//        System.out.println(s);
+//        System.out.println("id=" + headerCheck.splitId(s));
+//        System.out.println("auth="+ headerCheck.checkAuth(s));
+//        return ResponseEntity.ok(post);
+//    }
 
-        System.out.println("Post=" + post);
-        String s = getAuth(headers);
-        System.out.println(s);
-        System.out.println("id=" + headerCheck.splitId(s));
-        System.out.println("auth="+ headerCheck.checkAuth(s));
-        return ResponseEntity.ok(post);
-    }
-
-    @GetMapping("/list")
+    @GetMapping()
     public ResponseEntity<List<Post>> list() {
         List<Post> posts = postService.findPost();
         return ResponseEntity.ok().body(posts);
@@ -63,23 +65,13 @@ public class PostController {
         return ResponseEntity.ok().body(postListHashMap);
     }
 
-//    @GetMapping("/add")
-//    public String addForm(@ModelAttribute Post post, @RequestHeader HttpHeaders headers) {
-//        if (headerCheck.checkAuth(headers.toString()) == true) {
-//            return "post/addForm";
-//        }
-//        return null;
-//    }
 
     @PostMapping("/add")
-    public ResponseEntity<Post> addPost(@Valid @RequestBody Post post, @RequestHeader HttpHeaders headers) {
-        String auth = getAuth(headers);
-        if (auth == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
-        Long aLong = headerCheck.splitId(auth);
-        User user = userService.findById(aLong).orElseThrow();
-        Post savedPost = postService.save(post, user);
+    public ResponseEntity<Post> writePost(@RequestBody PostDto post,Authentication authentication) {
+
+        String name = authentication.getName();
+
+        Post savedPost = postService.save(post, userService.findByAccountId(name).orElseThrow());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPost);
     }

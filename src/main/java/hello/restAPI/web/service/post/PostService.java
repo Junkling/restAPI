@@ -3,10 +3,12 @@ package hello.restAPI.web.service.post;
 import hello.restAPI.customException.PostUserException;
 import hello.restAPI.domain.post.DeletedPost;
 import hello.restAPI.domain.post.Post;
+import hello.restAPI.web.dto.PostDto;
 import hello.restAPI.web.dto.PostUpdateDto;
 import hello.restAPI.domain.user.User;
 import hello.restAPI.web.repository.post.DeletePostRepository;
 import hello.restAPI.web.repository.post.PostRepository;
+import hello.restAPI.web.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +21,17 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
     private final DeletePostRepository deletePostRepository;
+    private final UserRepository userRepository;
 
 
     public Optional<Post> findById(Long postId) {
         return postRepository.findById(postId);
     }
-    public Post save(Post post, User user) {
+
+    public Post save(PostDto postDto, User user) {
+        Post post = new Post();
+        post.setTitle(postDto.getTitle());
+        post.setContents(postDto.getContents());
         post.setHeartCount(0);
         post.setUser(user);
         return postRepository.save(post);

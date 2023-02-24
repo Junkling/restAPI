@@ -1,10 +1,10 @@
 package hello.restAPI.web.controller;
 
 import hello.restAPI.domain.user.User;
+import hello.restAPI.web.dto.LoginDto;
 import hello.restAPI.web.dto.UserCreateDto;
-import hello.restAPI.web.exceptionManager.ExceptionManager;
 import hello.restAPI.web.service.user.UserService;
-import hello.restAPI.web.service.user.UserValidator;
+import hello.restAPI.web.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -17,13 +17,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
-
+    private final JwtUtils jwtUtils;
 
 
     @PostMapping("/join")
-    public ResponseEntity<String>add(@RequestBody UserCreateDto dto) {
-            userService.save(dto);
+    public ResponseEntity<String> add(@RequestBody UserCreateDto dto) {
+        System.out.println("아이디 패스워드" + dto.getAccountId() + "," + dto.getPassword());
+
+        userService.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body("가입 완료되었습니다.");
+    }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+        System.out.println("아이디 패스워드" + loginDto.getAccountId() + "," + loginDto.getPassword());
+        User loginUser = userService.login(loginDto.getAccountId(), loginDto.getPassword());
+        String jwt = jwtUtils.createJwt(String.valueOf(loginUser.getId()),loginUser.getRoles().get(0));
+
+        return ResponseEntity.ok().body(jwt);
     }
 
     @GetMapping("/delete")
