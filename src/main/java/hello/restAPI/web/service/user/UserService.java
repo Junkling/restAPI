@@ -8,17 +8,14 @@ import hello.restAPI.web.repository.user.UserRepository;
 import hello.restAPI.web.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +23,7 @@ import java.util.stream.Stream;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
+
 
 
     public String save(UserCreateDto user) {
@@ -39,6 +37,7 @@ public class UserService implements UserDetailsService {
         if (user.getAccountId() == null || user.getPassword() == null) {
             throw new RuntimeException("아이디 패스워드는 필수값입니다.");
         }
+        log.info("PW={}", user.getPassword());
         User user1 = User.builder()
                 .accountId(user.getAccountId())
                 .password(encoder.encode(user.getPassword()))
@@ -52,9 +51,8 @@ public class UserService implements UserDetailsService {
 
     public User login(String accountId, String password) {
         User user = userRepository.findByAccountId(accountId).orElseThrow(() -> new CustomUserException(ErrorCode.USERNAME_NOT_FOUND, "해당 아이디는 없는 아이디입니다."));
-        UserDetails userDetails = loadUserByUsername(accountId);
 
-        if (!encoder.matches(password, userDetails.getPassword())) {
+        if (!encoder.matches(password, user.getPassword())) {
             throw new CustomUserException(ErrorCode.INVALID_PASSWORD, "비밀번호가 틀렸습니다.");
         }
         return user;
