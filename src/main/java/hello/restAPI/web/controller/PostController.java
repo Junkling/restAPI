@@ -5,23 +5,26 @@ import hello.restAPI.domain.comment.Comment;
 import hello.restAPI.domain.post.Post;
 import hello.restAPI.web.dto.PostDto;
 import hello.restAPI.web.dto.PostUpdateDto;
-import hello.restAPI.domain.user.User;
 import hello.restAPI.web.service.heart.HeartService;
 import hello.restAPI.web.service.post.PostService;
 import hello.restAPI.web.service.user.UserService;
 import hello.restAPI.web.utils.HeaderCheck;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class PostController {
 
     private final HeartService heartService;
     private final UserService userService;
+
 
     private final HeaderCheck headerCheck;
 
@@ -67,11 +71,12 @@ public class PostController {
 
 
     @PostMapping("/add")
-    public ResponseEntity<Post> writePost(@RequestBody PostDto post,Authentication authentication) {
-
-        String name = authentication.getName();
-
-        Post savedPost = postService.save(post, userService.findByAccountId(name).orElseThrow());
+    @PreAuthorize("hasAnyRole('Realtor','Lessor','Lessee')")
+    //ROLE_Realtor 와 같이 앞에 ROLE_가 붙어야 시큐리티에서 권한을 인식함
+    public ResponseEntity<Post> writePost(@RequestBody PostDto post, @AuthenticationPrincipal User user) {
+        String accountId = user.getUsername();
+        System.out.println("name = " + accountId);
+        Post savedPost = postService.save(post, userService.findByAccountId(accountId).orElseThrow());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPost);
     }

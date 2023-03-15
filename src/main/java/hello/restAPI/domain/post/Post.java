@@ -1,6 +1,7 @@
 package hello.restAPI.domain.post;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import hello.restAPI.domain.comment.Comment;
 import hello.restAPI.domain.heart.Heart;
 import hello.restAPI.domain.user.User;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Entity
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

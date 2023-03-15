@@ -1,5 +1,6 @@
 package hello.restAPI.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import hello.restAPI.domain.heart.Heart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +36,8 @@ public class User implements UserDetails {
     private String password;
 
     private String nickName;
+
+    private boolean activated;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -48,6 +52,9 @@ public class User implements UserDetails {
     private Timestamp created;
     @UpdateTimestamp
     private Timestamp updated;
+
+    public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
